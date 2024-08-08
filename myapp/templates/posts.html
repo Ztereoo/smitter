@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{%block title%}My Posts {%endblock%}
+{%block content%}
+<form>
+    <textarea name="post" placeholder="Enter Post" rows="5" cols="30"></textarea> <br>
+    <input type="text" name="tags" placeholder="Enter tags">
+    <button type="submit">Send Post</button>
+</form>
+<h1>My Posts</h1>
+{%endblock%}
