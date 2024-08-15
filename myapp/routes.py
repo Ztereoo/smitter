@@ -1,4 +1,4 @@
-from flask import Flask,render_template,url_for,redirect,request
+from flask import Flask,render_template,url_for,redirect,request,flash
 
 from myapp import app,db
 from .models import Posts
@@ -17,8 +17,13 @@ def create_post():
     if request.method=='POST':
         title=request.form['title']
         content=request.form['content']
-        new_post=Posts(title=title,content=content)
-        db.session.add(new_post)
-        db.session.commit()
-        return redirect(url_for('posts'))
+        if title and content:
+            new_post=Posts(title=title,content=content)
+            db.session.add(new_post)
+            db.session.commit()
+            flash('Ваш пост добавлен')
+            return redirect(url_for('posts'))
+        else:
+            flash('Заполните поля')
+            return redirect(url_for('posts'))
     return render_template('create_post.html')
