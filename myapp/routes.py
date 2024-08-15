@@ -27,3 +27,23 @@ def create_post():
             flash('Заполните поля')
             return redirect(url_for('posts'))
     return render_template('create_post.html')
+
+@app.route('/update/<int:post_id>', methods=['GET','POST'])
+def update_post(post_id):
+    post=Posts.query.get_or_404(post_id)
+
+    if request.method=='POST':
+        post.title= request.form.get('title')
+        post.content= request.form.get('content')
+        db.session.commit()
+        flash('Пост успешно обновлен')
+        return redirect(url_for('posts'))
+    return render_template('update_post.html',post=post)
+
+@app.route('/delete/<int:post_id>', methods=['POST'])
+def delete_post(post_id):
+    post= Posts.query.get_or_404(post_id)
+    db.session.delete(post)
+    db.session.commit()
+    flash('Запись удалена')
+    return redirect(url_for('posts'))
