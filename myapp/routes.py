@@ -1,7 +1,8 @@
 from flask import Flask,render_template,url_for,redirect,request,flash
-
+from flask_login import login_user
+from werkzeug.security import check_password_hash,generate_password_hash
 from myapp import app,db
-from .models import Posts
+from .models import Posts,User
 
 @app.route('/')
 def index():
@@ -49,5 +50,43 @@ def delete_post(post_id):
     return redirect(url_for('posts'))
 
 @app.route('/login', methods=['POST','GET'])
-def login():
-    return render_template('login.html')
+def login_func():
+    login= request.form.get('login')
+    password= request.form.get('password')
+
+    if login and password:
+        user=User.query.filter_by(login=login).first()
+        if check_password_hash(user.password,password):
+            login_user(user)
+            return redirect(url_for('posts'))
+        else:
+            flash('пароли не совпадают')
+            return render_template('login.html')
+    else:
+        flash('заполните все поля')
+        return render_template('login.html')
+
+@app.route('/register',methods=['POST','GET'])
+def register():
+    login= request.form.get('login')
+    password= request.form.get('pass')
+    password2=request.form.get('confirm_pass')
+    if request.method=='POST':
+        if not (login or password or password2):
+            flash('Заполните все поля')
+        elif password != password2:
+            flash('пароли не совпадают')
+        else:
+            hash_pwd=generate_password_hash(password)
+            new_user= User(login=login,password=hash_pwd)
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Вы успешно зарегестрировались')
+            return redirect(url_for('login_func'))
+
+    return render_template('register.html')
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
