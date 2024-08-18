@@ -50,6 +50,24 @@ def delete_post(post_id):
     flash('Запись удалена','info')
     return redirect(url_for('posts'))
 
+@app.route('/search', methods=['GET','POST'])
+def search():
+    if request.method=='POST':
+        keyword= request.form.get('keyword')
+        if keyword:
+            results= Posts.query.filter(
+                db.or_(
+                    Posts.title.ilike(f'%{keyword}%'),
+                    Posts.content.ilike(f'%{keyword}%')
+                )
+            ).all()
+            return render_template('posts.html',posts=results,keyword=keyword)
+        else:
+            flash('Введите ключевое слово для поиска','warning')
+            return redirect(url_for('posts'))
+    return redirect(url_for('posts'))
+
+
 @app.route('/login', methods=['POST','GET'])
 def login_func():
     if request.method=='POST':
