@@ -1,8 +1,9 @@
 from flask import Flask,render_template,url_for,redirect,request,flash
-from flask_login import login_user
+from flask_login import login_user,logout_user
 from werkzeug.security import check_password_hash,generate_password_hash
 from myapp import app,db
 from .models import Posts,User
+from myapp import toastr
 
 @app.route('/')
 def index():
@@ -22,10 +23,10 @@ def create_post():
             new_post=Posts(title=title,content=content)
             db.session.add(new_post)
             db.session.commit()
-            flash('Ваш пост добавлен')
+            flash('Ваш пост добавлен','success')
             return redirect(url_for('posts'))
         else:
-            flash('Заполните поля')
+            flash('Заполните поля','warning')
             return redirect(url_for('posts'))
     return render_template('create_post.html')
 
@@ -37,7 +38,7 @@ def update_post(post_id):
         post.title= request.form.get('title')
         post.content= request.form.get('content')
         db.session.commit()
-        flash('Пост успешно обновлен')
+        flash('Пост успешно обновлен','success')
         return redirect(url_for('posts'))
     return render_template('update_post.html',post=post)
 
@@ -46,7 +47,7 @@ def delete_post(post_id):
     post= Posts.query.get_or_404(post_id)
     db.session.delete(post)
     db.session.commit()
-    flash('Запись удалена')
+    flash('Запись удалена','info')
     return redirect(url_for('posts'))
 
 @app.route('/login', methods=['POST','GET'])
@@ -59,12 +60,13 @@ def login_func():
             user = User.query.filter_by(login=login).first()
             if user and check_password_hash(user.password, password):
                 login_user(user)
+                flash('Login success','success')
                 return redirect(url_for('posts'))
             else:
-                flash('неправильнй пароль')
+                flash('неправильнй пароль','warning')
                 return render_template('login.html')
         else:
-            flash('заполните все поля')
+            flash('заполните все поля','warning')
             return render_template('login.html')
     return render_template('login.html')
 
@@ -76,15 +78,15 @@ def register():
     password2=request.form.get('confirm_pass')
     if request.method=='POST':
         if not (login or password or password2):
-            flash('Заполните все поля')
+            flash('Заполните все поля','warning')
         elif password != password2:
-            flash('пароли не совпадают')
+            flash('пароли не совпадают','error')
         else:
             hash_pwd=generate_password_hash(password)
             new_user= User(login=login,password=hash_pwd)
             db.session.add(new_user)
             db.session.commit()
-            flash('Вы успешно зарегестрировались')
+            flash('Вы успешно зарегестрировались','success')
             return redirect(url_for('login_func'))
 
     return render_template('register.html')
@@ -92,4 +94,5 @@ def register():
 @app.route('/logout')
 def logout():
     logout_user()
+    flash('You have been logged out','success')
     return redirect(url_for('index'))
