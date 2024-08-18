@@ -51,20 +51,23 @@ def delete_post(post_id):
 
 @app.route('/login', methods=['POST','GET'])
 def login_func():
-    login= request.form.get('login')
-    password= request.form.get('password')
+    if request.method=='POST':
+        login = request.form.get('login')
+        password = request.form.get('pass')
 
-    if login and password:
-        user=User.query.filter_by(login=login).first()
-        if check_password_hash(user.password,password):
-            login_user(user)
-            return redirect(url_for('posts'))
+        if login and password:
+            user = User.query.filter_by(login=login).first()
+            if user and check_password_hash(user.password, password):
+                login_user(user)
+                return redirect(url_for('posts'))
+            else:
+                flash('неправильнй пароль')
+                return render_template('login.html')
         else:
-            flash('пароли не совпадают')
+            flash('заполните все поля')
             return render_template('login.html')
-    else:
-        flash('заполните все поля')
-        return render_template('login.html')
+    return render_template('login.html')
+
 
 @app.route('/register',methods=['POST','GET'])
 def register():
