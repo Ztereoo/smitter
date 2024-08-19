@@ -3,7 +3,7 @@ from flask_login import login_user,logout_user
 from werkzeug.security import check_password_hash,generate_password_hash
 from myapp import app,db
 from .models import Posts,User
-from myapp import toastr
+
 
 @app.route('/')
 def index():
@@ -55,13 +55,21 @@ def search():
     if request.method=='POST':
         keyword= request.form.get('keyword')
         if keyword:
+            keyword= keyword.strip()
             results= Posts.query.filter(
                 db.or_(
-                    Posts.title.ilike(f'%{keyword}%'),
-                    Posts.content.ilike(f'%{keyword}%')
+                    Posts.title.ilike(f'{keyword}'),
+                    Posts.title.ilike(f'{keyword} %'),
+                    Posts.title.ilike(f'% {keyword}'),
+                    Posts.title.ilike(f'% {keyword} %'),
+
+                    Posts.content.ilike(f'{keyword}'),
+                    Posts.content.ilike(f'{keyword} %'),
+                    Posts.content.ilike(f'% {keyword}'),
+                    Posts.content.ilike(f'% {keyword} %')
                 )
             ).all()
-            return render_template('posts.html',posts=results,keyword=keyword)
+            return render_template('posts.html',posts=results,keyword=keyword.strip())
         else:
             flash('Введите ключевое слово для поиска','warning')
             return redirect(url_for('posts'))

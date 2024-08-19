@@ -1,40 +1,40 @@
 {% extends 'base.html' %}
 {%block title%}My Posts {%endblock%}
 {%block content%}
-{% with messages= get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-            {{ message }}
-        {% endfor%}
-    {% endif %}
-{% endwith %}
-<form action="{{url_for('search')}}" method="POST">
-    <input type="text" name="keyword" placeholder="Введите слово для поиска">
+<h3>Ищите свои посты по ключевому слову</h3>
+<form action="{{url_for('search')}}" method="POST" class="search-form" >
+    <input type="text" name="keyword" placeholder="Введите слово для поиска" style="width: 500px;" >
     <button type="submit">Поиск</button>
 </form>
+<br>
 
-{% if keyword%}
-    <p>Вот что нашлось для: <strong>{{keyword}}</strong></p>
-{% endif%}
-
-<form action="{{ url_for('create_post') }}" method="POST">
-    <input type="text" name="title" placeholder="Enter Title"> <br> <br>
-    <textarea name="content" placeholder="Enter Post" rows="5" cols="30"></textarea> <br>
-    <button type="submit">Send Post</button>
+<h3>Напишите свой пост</h3>
+<form action="{{ url_for('create_post') }}" method="POST" class="create-post-form">
+    <input type="text" name="title" placeholder="Введите название"> <br> <br>
+    <textarea name="content" placeholder="Введите основной текст" rows="5" cols="30"></textarea> <br>
+    <button type="submit">Опубликовать</button>
 </form>
-<h1>My Posts</h1>
-<ul>
-    {% for post in posts%}
-    <li style="list-style-type: none">
-        <h5>{{post.title}}</h5>
-        <p>{{post.content}}</p>
-        <form action="{{ url_for('update_post', post_id=post.id) }}" method="get" style="display:inline;">
-            <button type="submit">Edit</button>
-        </form>
-        <form action="{{ url_for('delete_post', post_id=post.id) }}" method="post" style="display:inline;">
-            <button type="submit">Delete</button>
-        </form>
-    </li> <br>
-    {% endfor%}
+<br>
+{% if keyword%}
+    <h3 class="search-results">Вот что нашлось для: <strong>{{keyword}}</strong></h3>
+
+{% endif%}
+<h2>Список постов</h2>
+<ul class="posts-list">
+    {% for post in posts %}
+    <li class="post-item">
+        <h5>{{ post.title }}</h5>
+        <p>{{ post.content }}</p>
+        <div style="display: inline;">
+            <form action="{{ url_for('update_post', post_id=post.id) }}" method="get" style="display: inline;">
+                <button type="submit">Edit</button>
+            </form>
+            <form action="{{ url_for('delete_post', post_id=post.id) }}" method="post" style="display: inline;">
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+    </li>
+    <br>
+    {% endfor %}
 </ul>
 {%endblock%}
