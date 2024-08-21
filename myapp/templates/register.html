@@ -4,6 +4,7 @@ Login Page
 {% endblock%}
 {% block content%}
 <form method="post">
+    <h4>Добро пожаловать на страницу регистрации</h4>
     <h5>Логин</h5>
     <input type="text" name="login" placeholder="Введите логин">
     <br> <br>
@@ -15,6 +16,5 @@ Login Page
     <p>Подтвердите свой пароль</p>
     <input type="text" name="confirm_pass" placeholder="Подтвердите пароль"> <br> <br>
     <button type="submit">Отправить</button> <br>
-    <a href="{{url_for('login_func')}}">Login</a>
 </form>
 {% endblock %}
