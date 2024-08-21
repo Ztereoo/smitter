@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
-{%block title%}My Posts {%endblock%}
-{%block content%}
+{% block title %}My Posts {% endblock %}
+
+{% block content %}
 <h3>Ищите свои посты по ключевому слову</h3>
 <form action="{{url_for('search')}}" method="POST" class="search-form" >
     <input type="text" name="keyword" placeholder="Введите слово для поиска"  class="search-input">
@@ -15,10 +16,10 @@
     <button type="submit">Опубликовать</button>
 </form>
 <br>
-{% if keyword%}
+{% if keyword %}
     <h3 class="search-results">Вот что нашлось для: <strong>{{keyword}}</strong></h3>
 
-{% endif%}
+{% endif %}
 <h2>Список постов</h2>
 <ul class="posts-list">
     {% for post in posts %}
@@ -37,4 +38,4 @@
     <br>
     {% endfor %}
 </ul>
-{%endblock%}
+{% endblock %}
