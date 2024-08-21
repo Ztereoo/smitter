@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect, request, flash
+from flask import render_template, url_for, redirect, request, flash
 from flask_login import login_user, logout_user,login_required
 from werkzeug.security import check_password_hash, generate_password_hash
 from myapp import app, db
@@ -116,7 +116,7 @@ def register():
         if not (login or password or password2):
             flash('Заполните все поля', 'warning')
         elif len(password) < 6:
-            flash('Пароль должен быть не менее 6 символов')
+            flash('Пароль должен быть не менее 6 символов','warning')
         elif password != password2:
             flash('пароли не совпадают', 'error')
         else:
