@@ -5,7 +5,7 @@
 <h1 xmlns="http://www.w3.org/1999/html">Edit Post</h1>
 
 <form action="{{url_for('update_post', post_id=post.id)}}" method="post">
-    <input type="text" name="title" value="{{post.title}}" placeholder="Enter Title"> <br> <br>
+    <input type="text" name="title" value="{{post.title}}" placeholder="Enter Title"> <br>
     <textarea name="content" placeholder="Enter Post" rows="5" cols="30">{{post.content}} </textarea> <br>
     <button type="submit">Update Post</button>
 </form>

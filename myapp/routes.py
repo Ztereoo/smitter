@@ -142,3 +142,7 @@ def redirect_to_signin(response):
     if response.status_code== 401:
         return redirect(url_for('login_func'))
     return response
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'),404
