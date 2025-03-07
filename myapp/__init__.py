@@ -15,6 +15,5 @@ toastr = Toastr(app)
 from myapp import models,routes
 
 with app.app_context():
-
     db.create_all()
 
