@@ -2,25 +2,25 @@
 {% block title %}My Posts {% endblock %}
 
 {% block content %}
-<h3>Ищите свои посты по ключевому слову</h3>
+<h3>Find your posts by keyword</h3>
 <form action="{{url_for('search')}}" method="POST" class="search-form" >
-    <input type="text" name="keyword" placeholder="Введите слово для поиска"  class="search-input">
-    <button type="submit">Поиск</button>
+    <input type="text" name="keyword" placeholder="Enter keyword and search"  class="search-input">
+    <button type="submit">Search</button>
 </form>
 <br>
 
-<h3>Напишите свой пост</h3>
+<h3>Create new post</h3>
 <form action="{{ url_for('create_post') }}" method="POST" class="create-post-form">
-    <input type="text" name="title" placeholder="Введите название"> <br> <br>
-    <textarea name="content" placeholder="Введите основной текст" rows="5" cols="30"></textarea> <br>
-    <button type="submit">Опубликовать</button>
+    <input type="text" name="title" placeholder="Enter title"> <br> <br>
+    <textarea name="content" placeholder="Enter text" rows="5" cols="30"></textarea> <br>
+    <button type="submit">Publish</button>
 </form>
 <br>
 {% if keyword %}
-    <h3 class="search-results">Вот что нашлось для: <strong>{{keyword}}</strong></h3>
+    <h3 class="search-results">Look what we found: <strong>{{keyword}}</strong></h3>
 
 {% endif %}
-<h2>Список постов</h2>
+<h2>Posts list</h2>
 <ul class="posts-list">
     {% for post in posts %}
     <li class="post-item">
